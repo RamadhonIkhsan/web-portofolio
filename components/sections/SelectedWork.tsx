@@ -116,7 +116,24 @@ export function SelectedWork() {
     // ------------------------------------------------------------------
     mm.add("(min-width: 768px)", () => {
       gsap.set(".project-card", { "--card-transform": "translateY(var(--y, 0px))" });
-      const getScrollAmount = () => -(track.scrollWidth - window.innerWidth);
+      // Keep the horizontal travel and pin duration tied to the last card's
+      // actual position so every card is visible before the next section.
+      const getScrollDistance = () => {
+        const lastCard = track.querySelector<HTMLElement>(
+          ".project-card:last-child"
+        );
+        if (!lastCard) return 0;
+
+        const trackLeft = track.getBoundingClientRect().left;
+        const lastCardRight = lastCard.getBoundingClientRect().right + 100; // Setting Scroll Distance
+
+        console.log({ trackLeft, lastCardRight, section });
+        return Math.max(
+          0,
+          lastCardRight - trackLeft - section.clientWidth
+        );
+      };
+      const getScrollAmount = () => -getScrollDistance();
 
       const horizontalTween = gsap.to(track, {
         x: getScrollAmount,
@@ -124,8 +141,9 @@ export function SelectedWork() {
         scrollTrigger: {
           trigger: section,
           pin: true,
+          pinSpacing: true,
           scrub: 1,
-          end: () => "+=" + track.scrollWidth,
+          end: () => "+=" + getScrollDistance(),
           invalidateOnRefresh: true,
         },
       });
