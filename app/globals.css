@@ -1,26 +1,121 @@
+@import "lenis/dist/lenis.css";
+@import "../styles/tokens.css";
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-bg-dark: var(--bg-dark);
+  --color-lime: var(--lime);
+  --color-purple: var(--purple);
+  --color-purple-light: var(--purple-light);
+  --color-text-dim: var(--text-dim);
+  --font-display: var(--font-display), sans-serif;
+  --font-hud: var(--font-hud), monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html,
+body {
+  background-color: var(--bg-dark);
+  color: #ffffff;
+  font-family: var(--font-hud), monospace;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Ensure smooth scroll container behaves properly */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Display & HUD font utility classes */
+.font-display {
+  font-family: var(--font-display), sans-serif;
+}
+
+.font-hud {
+  font-family: var(--font-hud), monospace;
+}
+
+/* Accessibility: Visible Focus Rings */
+:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 4px;
+}
+
+/* Reduced Motion: Disable all CSS transitions/animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Hide scrollbar for cleaner UI */
+::-webkit-scrollbar {
+  display: none;
 }
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Cursor: Hide native cursor on desktop fine pointer only, preserve on form inputs */
+@media (hover: hover) and (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor * {
+    cursor: none !important;
+  }
+
+  body.has-custom-cursor input,
+  body.has-custom-cursor textarea,
+  body.has-custom-cursor select,
+  body.has-custom-cursor option,
+  body.has-custom-cursor [contenteditable="true"],
+  body.has-custom-cursor [data-cursor="native"],
+  body.has-custom-cursor [data-cursor="native"] * {
+    cursor: auto !important;
+  }
+
+  body.has-custom-cursor input[type="text"],
+  body.has-custom-cursor input[type="email"],
+  body.has-custom-cursor input[type="password"],
+  body.has-custom-cursor input[type="search"],
+  body.has-custom-cursor input[type="number"],
+  body.has-custom-cursor input[type="tel"],
+  body.has-custom-cursor input[type="url"],
+  body.has-custom-cursor textarea {
+    cursor: text !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.has-custom-cursor,
+  body.has-custom-cursor * {
+    cursor: auto !important;
+  }
+}
+
